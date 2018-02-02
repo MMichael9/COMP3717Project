@@ -1,16 +1,18 @@
 package ca.bcit.comp3717project;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.location.Location;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
-/*
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
-*/
+
 public class MainActivity extends AppCompatActivity {
 
     @Override

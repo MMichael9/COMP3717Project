@@ -26,5 +26,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(goToMap);
     }
 
-// dylan update
+    @Nullable
+    @Override
+    public ActionBar getActionBar() {
+        return super.getActionBar();
+    }
 }

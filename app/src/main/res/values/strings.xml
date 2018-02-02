@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">COMP 3717 Project</string>
     <string name="title_activity_settings">Preferences</string>
+    <string name="test">Test String</string>
 
 
 </resources>

@@ -26,5 +26,5 @@ public class MainActivity extends AppCompatActivity {
         startActivity(goToMap);
     }
 
-    //added comments
+    //added comments - halp pls
 }

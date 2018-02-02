@@ -17,4 +17,6 @@ public class MainActivity extends AppCompatActivity {
         Intent goToMap = new Intent(this, MapActivity.class);
         startActivity(goToMap);
     }
+
+    //added comments
 }

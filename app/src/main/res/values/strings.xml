@@ -3,6 +3,7 @@
     <string name="title_activity_settings">Preferences</string>
     <string name="test">Test String</string>
     <string name="halp">version control is a bitch</string>
+    <string name="title_activity_maps_test">Map</string>
 
 
 </resources>

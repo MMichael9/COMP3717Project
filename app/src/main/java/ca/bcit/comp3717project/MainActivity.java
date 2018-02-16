@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void toMap(final View view) {
-        Intent goToMap = new Intent(this, MapActivity.class);
+        Intent goToMap = new Intent(this, MapsTestActivity.class);
         startActivity(goToMap);
     }
 

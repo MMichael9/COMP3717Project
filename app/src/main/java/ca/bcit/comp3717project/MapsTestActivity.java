@@ -12,11 +12,13 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsTestActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private LatLng mapLatLng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,11 @@ public class MapsTestActivity extends FragmentActivity implements OnMapReadyCall
         mMap.moveCamera(CameraUpdateFactory.newLatLng(newWest));
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(new LatLng(49.2057,-122.9110), 13,13,0)));
 
+        setMapLatLng(newWest);
+    }
 
+    public void setMapLatLng(LatLng latlng) {
+        this.mapLatLng = latlng;
     }
 
     public void toPreferences(final View view) {
@@ -59,6 +65,8 @@ public class MapsTestActivity extends FragmentActivity implements OnMapReadyCall
 
     public void toRating(final View view) {
         Intent toRatingIntent = new Intent(this, LocationRatingActivity.class);
+        toRatingIntent.putExtra("lat", mapLatLng.latitude);
+        toRatingIntent.putExtra("lng", mapLatLng.longitude);
         startActivity(toRatingIntent);
     }
 }

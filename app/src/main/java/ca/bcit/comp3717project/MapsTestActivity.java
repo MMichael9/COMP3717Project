@@ -44,8 +44,10 @@ public class MapsTestActivity extends FragmentActivity implements GoogleMap.OnMa
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
+        // Add a marker in New West and move the camera
         LatLng newWest = new LatLng(49.2057, -122.9110);
+        mapLatLng = newWest;
+
         mMap.addMarker(new MarkerOptions().position(newWest).title("Marker"));
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(newWest));

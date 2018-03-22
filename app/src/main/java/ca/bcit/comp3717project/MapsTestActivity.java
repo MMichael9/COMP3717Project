@@ -15,7 +15,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsTestActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsTestActivity extends FragmentActivity implements GoogleMap.OnMapClickListener, OnMapReadyCallback {
 
     private GoogleMap mMap;
     private LatLng mapLatLng;
@@ -51,8 +51,11 @@ public class MapsTestActivity extends FragmentActivity implements OnMapReadyCall
         mMap.moveCamera(CameraUpdateFactory.newLatLng(newWest));
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(new LatLng(49.2057,-122.9110), 13,13,0)));
 
-        setMapLatLng(newWest);
+        mMap.setOnMapClickListener(this);
+
     }
+
+
 
     public void setMapLatLng(LatLng latlng) {
         this.mapLatLng = latlng;
@@ -68,5 +71,21 @@ public class MapsTestActivity extends FragmentActivity implements OnMapReadyCall
         toRatingIntent.putExtra("lat", mapLatLng.latitude);
         toRatingIntent.putExtra("lng", mapLatLng.longitude);
         startActivity(toRatingIntent);
+    }
+
+    @Override
+    public void onMapClick(LatLng point) {
+
+        mMap.clear();
+
+        mapLatLng = point;
+
+        MarkerOptions marker = new MarkerOptions().position(
+                new LatLng(point.latitude, point.longitude)).title("New Marker");
+
+        mMap.addMarker(marker);
+
+        System.out.println(point.latitude+"---"+ point.longitude);
+
     }
 }

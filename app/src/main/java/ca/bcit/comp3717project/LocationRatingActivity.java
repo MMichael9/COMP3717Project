@@ -29,25 +29,35 @@ public class LocationRatingActivity extends AppCompatActivity {
 
     private float MAX_RATING = 5.0f;
     private RatingBar ratingBarView;
+    private float rating = 0;
 
     private List<Amenity> nearbyAmenitiesList = new ArrayList<>();
     private ListView amenitiesListView;
     private ArrayAdapter amenitiesAdapter;
     private Preferences preferences;
     private LatLng mapLatLng;
-    private final double RANGE = 0.007;
+    private final double RANGE = 0.009;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.location_rating);
 
-        // get map latlng
+        setLatLng();
+        setPreferences();
+        populateList();
+        initListView();
+        setRating();
+        setStarRating();
+    }
+
+    private void setLatLng() {
         double lat = getIntent().getExtras().getDouble("lat");
         double lng = getIntent().getExtras().getDouble("lng");
         mapLatLng = new LatLng(lat, lng);
+    }
 
-        // get preferences
+    private void setPreferences() {
         SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
         Gson gson = new Gson();
         String json = mPrefs.getString("preferences", "");
@@ -56,12 +66,9 @@ public class LocationRatingActivity extends AppCompatActivity {
             preferences = new Preferences();
             Log.d(TAG, "onCreate: " + preferences.school);
         }
+    }
 
-        // populate nearby amenities list
-        populateList();
-        Log.d(TAG, "onCreate: " + nearbyAmenitiesList.size());
-
-        // update listview
+    private void initListView() {
         amenitiesListView = findViewById(R.id.list);
         amenitiesAdapter = new AmenitiesAdapter(this, nearbyAmenitiesList);
         amenitiesListView.setAdapter(amenitiesAdapter);
@@ -76,23 +83,6 @@ public class LocationRatingActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        // get rating
-        int value = 0;
-        for (Amenity am : nearbyAmenitiesList) {
-            value += am.getValue(preferences);
-        }
-        float valuePercent = Math.min(1.0f, value / 100f);
-        Log.d(TAG, "onCreate: value = " + value + ", percent = " + valuePercent );
-
-        float valueStars = MAX_RATING * valuePercent;
-        Log.d(TAG, "onCreate: stars " + valueStars);
-
-        // rating bar
-        ratingBarView = findViewById(R.id.ratingBar);
-        ratingBarView.setNumStars((int)MAX_RATING);
-        ratingBarView.setRating(valueStars);
-        ratingBarView.setIsIndicator(true);
     }
 
     private void populateList() {
@@ -103,10 +93,34 @@ public class LocationRatingActivity extends AppCompatActivity {
         }
     }
 
+    private void setRating() {
+        int value = 0;
+        for (Amenity am : nearbyAmenitiesList) {
+            value += am.getValue(preferences);
+        }
+        float valuePercent = Math.min(1.0f, value / 100f);
+        Log.d(TAG, "onCreate: value = " + value + ", percent = " + valuePercent );
+
+        rating = MAX_RATING * valuePercent;
+        Log.d(TAG, "onCreate: stars " + rating);
+    }
+
+    private void setStarRating() {
+        ratingBarView = findViewById(R.id.ratingBar);
+        ratingBarView.setNumStars((int)MAX_RATING);
+        ratingBarView.setRating(rating);
+        ratingBarView.setIsIndicator(true);
+    }
+
     private boolean isNearby(Amenity amenity) {
-        Log.d(TAG, "isNearby: " + amenity.name + " : " + (amenity.lat - mapLatLng.latitude));
-        return Math.abs(amenity.lat - mapLatLng.latitude) < RANGE &&
-                Math.abs(amenity.lng - mapLatLng.longitude) < RANGE;
+        Log.d(TAG, "isNearby: " + amenity.name + " : " + getDistanceTo(amenity));
+        return getDistanceTo(amenity) < RANGE;
+    }
+
+    private double getDistanceTo(Amenity amenity) {
+        double a2 = Math.pow(amenity.lat - mapLatLng.latitude, 2);
+        double b2 = Math.pow(amenity.lng - mapLatLng.longitude, 2);
+        return Math.sqrt(a2 + b2);
     }
 
     private class AmenitiesAdapter extends ArrayAdapter<Amenity> {
@@ -117,16 +131,17 @@ public class LocationRatingActivity extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             // Get the data item for this position
-            Amenity user = getItem(position);
+            Amenity amenity = getItem(position);
             // Check if an existing view is being reused, otherwise inflate the view
             if (convertView == null) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.adapter, parent, false);
             }
             // Lookup view for data population
             TextView tvName = convertView.findViewById(R.id.name);
-            TextView tvDesc = convertView.findViewById(R.id.desc);
+            TextView tvDist = convertView.findViewById(R.id.distanceTo);
             // Populate the data into the template view using the data object
-            tvName.setText(user.name);
+            tvName.setText(amenity.name);
+            tvDist.setText("Distance to: " + Double.toString(getDistanceTo(amenity)));
             // Return the completed view to render on screen
             return convertView;
         }

@@ -10,15 +10,15 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:paddingVertical="5sp"
-        android:text="TextView"
+        android:text="Name"
         android:textAlignment="center"
         android:textSize="24sp" />
 
     <TextView
-        android:id="@+id/desc"
+        android:id="@+id/distanceTo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Description"
-        android:textSize="18sp" />
+        android:text="Distance To" />
+
 </LinearLayout>

@@ -5,8 +5,8 @@ package ca.bcit.comp3717project;
  */
 
 public abstract class Amenity {
-    double lat, lng;
-    String name = "";
+    private double lat, lng;
+    private String name = "";
 
     Amenity() {};
 
@@ -39,5 +39,7 @@ public abstract class Amenity {
     }
 
     public abstract int getValue(Preferences pref);
+
+    public abstract String getCategory();
 
 }

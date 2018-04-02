@@ -24,8 +24,14 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Math.atan2;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
+
 public class LocationRatingActivity extends AppCompatActivity {
     private static final String TAG = "LocationRatingActivity";
+    private static final double R_EARTH = 6378137; // in meters
 
     private float MAX_RATING = 5.0f;
     private RatingBar ratingBarView;
@@ -36,7 +42,7 @@ public class LocationRatingActivity extends AppCompatActivity {
     private ArrayAdapter amenitiesAdapter;
     private Preferences preferences;
     private LatLng mapLatLng;
-    private final double RANGE = 0.009;
+    private final double RANGE = 1; // in km
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +51,8 @@ public class LocationRatingActivity extends AppCompatActivity {
 
         setLatLng();
         setPreferences();
-        populateList();
         initListView();
+        populateList();
         setRating();
         setStarRating();
     }
@@ -58,13 +64,15 @@ public class LocationRatingActivity extends AppCompatActivity {
     }
 
     private void setPreferences() {
-        SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
+        SharedPreferences mPrefs = getSharedPreferences("nwm.pref", MODE_PRIVATE);
         Gson gson = new Gson();
         String json = mPrefs.getString("preferences", "");
         preferences = gson.fromJson(json, Preferences.class);
         if (preferences == null) {
             preferences = new Preferences();
-            Log.d(TAG, "onCreate: " + preferences.school);
+            Log.d(TAG, "onCreate: preferences not found " + preferences.shopping);
+        } else {
+            Log.d(TAG, "onCreate: preferences found " + preferences.shopping);
         }
     }
 
@@ -77,20 +85,22 @@ public class LocationRatingActivity extends AppCompatActivity {
         amenitiesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(LocationRatingActivity.this, "Clicked: " + ((Amenity) parent.getItemAtPosition(position)).name, Toast.LENGTH_SHORT).show();
+                Toast.makeText(LocationRatingActivity.this, "Clicked: " + ((Amenity) parent.getItemAtPosition(position)).getName(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(Intent.ACTION_WEB_SEARCH );
-                intent.putExtra(SearchManager.QUERY, "New West Minster");
+                intent.putExtra(SearchManager.QUERY, "New Westminster " + ((Amenity) parent.getItemAtPosition(position)).getName());
                 startActivity(intent);
             }
         });
     }
 
     private void populateList() {
+        nearbyAmenitiesList.clear();
         for (Amenity amenity : MainActivity.AMENITIES) {
             if (isNearby(amenity)) {
                 nearbyAmenitiesList.add(amenity);
             }
         }
+        amenitiesAdapter.notifyDataSetChanged();
     }
 
     private void setRating() {
@@ -113,14 +123,29 @@ public class LocationRatingActivity extends AppCompatActivity {
     }
 
     private boolean isNearby(Amenity amenity) {
-        Log.d(TAG, "isNearby: " + amenity.name + " : " + getDistanceTo(amenity));
+        Log.d(TAG, "isNearby: " + amenity.getName() + " : " + getDistanceTo(amenity));
         return getDistanceTo(amenity) < RANGE;
     }
 
+    private double rad(double x) {
+        return x * Math.PI / 180;
+    }
+
     private double getDistanceTo(Amenity amenity) {
-        double a2 = Math.pow(amenity.lat - mapLatLng.latitude, 2);
-        double b2 = Math.pow(amenity.lng - mapLatLng.longitude, 2);
-        return Math.sqrt(a2 + b2);
+        double lon2 = amenity.getLng();
+        double lon1 = mapLatLng.longitude;
+        double lat2 = amenity.getLat();
+        double lat1 = mapLatLng.latitude;
+
+        double dLat = rad(lat2 - lat1);
+        double dLong = rad(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(rad(lat1)) * Math.cos(rad(lat2)) *
+                        Math.sin(dLong / 2) * Math.sin(dLong / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double d = R_EARTH * c;
+        //Log.d(TAG, "getDistanceTo: d in km = " + d);
+        return d / 1000;
     }
 
     private class AmenitiesAdapter extends ArrayAdapter<Amenity> {
@@ -138,10 +163,10 @@ public class LocationRatingActivity extends AppCompatActivity {
             }
             // Lookup view for data population
             TextView tvName = convertView.findViewById(R.id.name);
-            TextView tvDist = convertView.findViewById(R.id.distanceTo);
+            TextView tvCategory = convertView.findViewById(R.id.category);
             // Populate the data into the template view using the data object
-            tvName.setText(amenity.name);
-            tvDist.setText("Distance to: " + Double.toString(getDistanceTo(amenity)));
+            tvName.setText(amenity.getName());
+            tvCategory.setText(amenity.getCategory());
             // Return the completed view to render on screen
             return convertView;
         }

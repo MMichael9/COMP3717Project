@@ -1,15 +1,20 @@
 package ca.bcit.comp3717project;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,11 +29,16 @@ public class MainActivity extends AppCompatActivity {
         downloadShoppingData();
         downloadSchoolData();
         downloadCultureData();
-    }
 
-    public void toMap(final View view) {
-        Intent goToMap = new Intent(this, MapsTestActivity.class);
-        startActivity(goToMap);
+        new Handler().postDelayed(new Runnable(){
+            @Override
+            public void run() {
+                /* Create an Intent that will start the Menu-Activity. */
+                Intent mainIntent = new Intent(MainActivity.this, MapsTestActivity.class);
+                MainActivity.this.startActivity(mainIntent);
+                MainActivity.this.finish();
+            }
+        }, 3000);
     }
 
     public void downloadShoppingData() {

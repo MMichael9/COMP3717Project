@@ -7,6 +7,9 @@ package ca.bcit.comp3717project;
 public class Culture extends Amenity {
     @Override
     public int getValue(Preferences pref) {
-        return (int) (pref.culture * 0.1);
+        return (int) (pref.culture * 0.05);
     }
+
+    @Override
+    public String getCategory() { return "Culture"; }
 }

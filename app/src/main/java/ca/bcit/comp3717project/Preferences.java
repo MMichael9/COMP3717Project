@@ -7,19 +7,26 @@ import android.os.Parcelable;
  */
 
 public class Preferences {
-    int school, shopping, culture, parks;
+    int school,
+            shopping,
+            culture;
+            //parks;
 
     public Preferences() {
         this.school = 50;
         this.shopping = 50;
         this.culture = 50;
-        this.parks = 50;
+        //this.parks = 50;
     }
 
-    public Preferences(int school, int shopping, int culture, int parks) {
+    public Preferences(int school, int shopping, int culture/*, int parks*/) {
         this.school = school;
         this.shopping = shopping;
         this.culture = culture;
-        this.parks = parks;
+        //this.parks = parks;
+    }
+
+    public String toString() {
+        return "Shopping : " + shopping;
     }
 }

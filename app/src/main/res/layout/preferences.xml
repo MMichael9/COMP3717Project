@@ -14,78 +14,99 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/common_google_signin_btn_text_dark_default"
+        android:elevation="8dp"
+        android:paddingBottom="5sp"
+        android:paddingTop="5sp"
         android:text="Preferences"
         android:textAlignment="center"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.066" />
+        app:layout_constraintVertical_bias="0.13" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="30sp"
+        android:layout_marginRight="30sp"
         android:paddingVertical="5dp"
         android:text="Schools"
         android:textAlignment="viewStart"
+        android:textColor="@color/colorPrimary"
         android:textSize="24sp" />
 
     <SeekBar
         android:id="@+id/seekBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15sp"
+        android:layout_marginLeft="30sp"
+        android:layout_marginRight="30sp"
+        android:layout_marginTop="5sp" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="30sp"
+        android:layout_marginRight="30sp"
         android:paddingVertical="5dp"
         android:text="Shopping"
         android:textAlignment="viewStart"
+        android:textColor="@color/colorPrimary"
         android:textSize="24sp" />
 
     <SeekBar
         android:id="@+id/seekBar2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15sp"
+        android:layout_marginLeft="30sp"
+        android:layout_marginRight="30sp"
+        android:layout_marginTop="5sp" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="30sp"
+        android:layout_marginRight="30sp"
         android:paddingVertical="5dp"
         android:text="Culture"
         android:textAlignment="viewStart"
+        android:textColor="@color/colorPrimary"
         android:textSize="24sp" />
 
     <SeekBar
         android:id="@+id/seekBar3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="5dp"
-        android:text="Parks"
-        android:textAlignment="viewStart"
-        android:textSize="24sp" />
+        android:layout_marginBottom="15sp"
+        android:layout_marginLeft="30sp"
+        android:layout_marginRight="30sp"
+        android:layout_marginTop="5sp" />
 
-    <SeekBar
-        android:id="@+id/seekBar4"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="savePreferences"
-        android:text="Save" />
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:background="@color/colorPrimaryDark"
+            android:onClick="savePreferences"
+            android:text="Save Preferences"
+            android:textColor="@color/common_google_signin_btn_text_dark_default" />
+    </LinearLayout>
 
 </LinearLayout>

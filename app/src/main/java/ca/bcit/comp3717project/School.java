@@ -9,4 +9,7 @@ public class School extends Amenity {
     public int getValue(Preferences pref) {
         return (int) (pref.school * 0.1);
     }
+
+    @Override
+    public String getCategory() { return "School"; }
 }
